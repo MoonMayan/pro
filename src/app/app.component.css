@@ -1,0 +1,41 @@
+.main{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    background-color: black;
+    box-sizing: border-box;
+}
+.topsection{
+   height:10% ;
+   width: 100%;
+   position: sticky;
+   background-color: black;
+   top:0px;
+   z-index: 1000;
+ 
+   box-sizing: border-box;
+}
+.midsection{
+   position: absolute;
+   height: 80%;
+   width: 100%;
+   top:10%;
+   overflow-y: scroll;
+
+   box-sizing: border-box;
+}
+.midsection::-webkit-scrollbar { 
+    display: none;
+}
+.bottomsection{
+   position: sticky;
+   height: 10%;
+   bottom: 0px;
+   width: 100%;
+   background-color: black;
+ 
+   box-sizing: border-box;
+}
