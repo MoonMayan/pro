@@ -4,13 +4,56 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-products',
   standalone: true,
-  imports: [NgFor, NgClass, NgIf],
+  imports: [NgFor, NgIf],
   templateUrl: './products.component.html',
   styleUrl: './products.component.css',
 })
 export class ProductsComponent {
   products = [
-   
+     {
+      name: 'KYARI Sansevieria Green Snake Air Purifier Plant',
+      image: 'KYARI Sansevieria Green Snake Air Purifier Plant.jpg',
+      link: 'https://amzn.to/44xARmr',
+    },
+      {
+      name: 'NYRWANA Table Lamp',
+      image: 'NYRWANA Table Lamp.jpg',
+      link: 'https://amzn.to/3Tnshlp',
+    },
+  {
+      name: 'Wooden Headphone Stand',
+      image: 'Wooden Headphone Stand.jpg',
+      link: 'https://amzn.to/40yYGJp',
+    },
+      {
+      name: 'Kreo Hive RGB',
+      image: 'Kreo Hive RGB.jpg',
+      link: 'https://amzn.to/44zk16M',
+    },
+        {
+      name: 'Cosmic Byte Atlas',
+      image: 'Cosmic Byte Atlas.jpg',
+      link: 'https://amzn.to/44DaZ92',
+    },
+      {
+      name: 'Boult Newly Launched',
+      image: 'Boult Newly Launched.jpg',
+      link: 'https://amzn.to/4ld4pNk',
+    },
+    {
+      name: 'Ant Esports H520W',
+      image: 'Ant Esports H520W.jpg',
+      link: 'https://amzn.to/4lyrObU',
+    },
+     {
+      name: 'Philips AC0920',
+      image: 'Philips AC0920.jpg',
+      link: 'https://amzn.to/3TqwXa4',
+    },  {
+      name: 'daWg HeadBug G60',
+      image: 'daWg HeadBug G60.jpg',
+      link: 'https://amzn.to/3Idp45m',
+    },
     {
       name: 'Sony Alpha ILCE-6700 APS-C Camera',
       image: 'Sony Alpha ILCE-6700 APS-C.jpg',
