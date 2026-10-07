@@ -1,23 +1,145 @@
+<div class="page" @pageEnter>
 
-<div class="product-container">
-  <div *ngFor="let product of products" class="flip-card">
-    <div class="flip-card-inner" >
-      
-   
-      <div class="flip-card-front">
-        <img [src]="product.image" [alt]="product.name">
-        <h3>{{ product.name }}</h3>
+  <!-- Ambient animated mesh background -->
+  <div class="bg-mesh" aria-hidden="true">
+    <span class="orb orb-a"></span>
+    <span class="orb orb-b"></span>
+    <span class="orb orb-c"></span>
+    <span class="grid-lines"></span>
+  </div>
+
+  <!-- ===== Sticky glass header ===== -->
+  <header class="toolbar">
+    <div class="brand">
+      <span class="brand-mark">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" fill="currentColor"/>
+        </svg>
+      </span>
+      <div class="brand-copy">
+        <span class="eyebrow">Curated Setup Gear</span>
+        <h1>The Gear Shelf</h1>
       </div>
+    </div>
 
-   
-      <div class="flip-card-back">
-        <a *ngIf="product.link" [href]="product.link" target="_blank" (click)="$event.stopPropagation()">
-          Click here to Buy
-        </a>
-        <p *ngIf="!product.link">No link available</p>
+    <div class="toolbar-controls">
+      <div class="search-wrap">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none">
+          <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/>
+          <path d="M20 20L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <input
+          type="text"
+          [(ngModel)]="searchTerm"
+          placeholder="Search products&hellip;"
+          aria-label="Search products"
+        />
+        <button
+          *ngIf="searchTerm"
+          class="clear-btn"
+          type="button"
+          (click)="searchTerm = ''"
+          aria-label="Clear search"
+        >
+          <svg viewBox="0 0 24 24" fill="none"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
       </div>
+      <span class="result-count">{{ filteredProducts.length }} items</span>
+    </div>
+  </header>
 
+  <!-- ===== Category chips ===== -->
+  <nav class="chip-row" aria-label="Filter by category">
+    <button
+      *ngFor="let cat of categories"
+      type="button"
+      class="chip"
+      [class.active]="activeCategory === cat"
+      (click)="activeCategory = cat"
+    >
+      {{ cat }}
+    </button>
+  </nav>
+
+  <!-- ===== Product grid ===== -->
+  <section class="product-container">
+    <article
+      *ngFor="let product of filteredProducts; let i = index; trackBy: trackByName"
+      class="flip-card"
+      [style.--delay]="(i % 8) * 45 + 'ms'"
+    >
+      <div class="flip-card-inner">
+
+        <div
+          class="flip-card-front"
+          (mousemove)="onSpotlight($event)"
+          (mouseleave)="resetSpotlight($event)"
+        >
+          <span class="spotlight" aria-hidden="true"></span>
+
+          <div class="corner-actions">
+            <button
+              class="icon-btn"
+              type="button"
+              (click)="copyLink(product, $event)"
+              aria-label="Copy product link"
+            >
+              <svg viewBox="0 0 24 24" fill="none">
+                <rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.8"/>
+                <path d="M5 15V6a2 2 0 0 1 2-2h9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </div>
+
+          <div class="thumb" [class.loaded]="product.loaded">
+            <span class="skeleton" *ngIf="!product.loaded"></span>
+            <img
+              [src]="product.image"
+              [alt]="product.name"
+              loading="lazy"
+              (load)="product.loaded = true"
+            >
+          </div>
+          <h3>{{ product.name }}</h3>
+          <span class="category-pill">{{ categorize(product.name) }}</span>
+        </div>
+
+        <div class="flip-card-back">
+          <span class="back-label">{{ product.name }}</span>
+          <a
+            *ngIf="product.link"
+            [href]="product.link"
+            target="_blank"
+            rel="noopener"
+            (click)="$event.stopPropagation()"
+            class="buy-btn"
+          >
+            Buy this
+            <svg viewBox="0 0 24 24" fill="none"><path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <p *ngIf="!product.link" class="no-link">No link available</p>
+        </div>
+
+      </div>
+    </article>
+  </section>
+
+  <!-- ===== Empty state ===== -->
+  <div class="empty-state" *ngIf="filteredProducts.length === 0">
+    <svg class="empty-icon" viewBox="0 0 24 24" fill="none">
+      <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.6"/>
+      <path d="M20 20L16.65 16.65" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>
+    <p>Nothing matches &ldquo;{{ searchTerm || activeCategory }}&rdquo;.</p>
+    <button type="button" class="ghost-btn" (click)="clearFilters()">Clear filters</button>
+  </div>
+
+  <!-- ===== Toasts ===== -->
+  <div class="toast-stack" aria-live="polite">
+    <div class="toast" *ngFor="let toast of toasts" @toastAnim>
+      <svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      {{ toast.message }}
     </div>
   </div>
-</div>
 
+</div>

@@ -1,13 +1,102 @@
-.topmain{
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: black;
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
 
-}
-.heading{
-    text-align: center;
-    color: white;
+:host {
+  --line: rgba(255, 255, 255, 0.09);
+  --text-hi: #f3f5f9;
+  --accent-a: #45e0ff;
+  --accent-b: #8b6bff;
+  --accent-grad: linear-gradient(135deg, var(--accent-a), var(--accent-b));
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+
+  display: block;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  font-family: 'Inter', sans-serif;
 }
 
+.topmain {
+  width: 100%;
+  background: rgba(6, 7, 12, 0.5);
+  border-bottom: 1px solid transparent;
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+  transition: background 0.35s var(--ease), border-color 0.35s var(--ease), backdrop-filter 0.35s var(--ease);
+}
+
+.topmain.scrolled {
+  background: rgba(9, 11, 17, 0.72);
+  border-bottom-color: var(--line);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  box-shadow: 0 20px 40px -30px rgba(0, 0, 0, 0.8);
+}
+
+.nav-inner {
+  max-width: 1480px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;   /* centers the brand */
+  padding: 16px 24px;
+  transition: padding 0.3s var(--ease);
+}
+
+.topmain.scrolled .nav-inner {
+  padding-top: 11px;
+  padding-bottom: 11px;
+}
+
+/* ===== Brand ===== */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.brand-mark {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent-grad);
+  color: #05060a;
+  flex-shrink: 0;
+  animation: pulse-glow 3.2s ease-in-out infinite;
+}
+
+.brand-mark svg { width: 16px; height: 16px; }
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(69, 224, 255, 0.35); }
+  50% { box-shadow: 0 0 0 7px rgba(69, 224, 255, 0); }
+}
+
+.heading {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 0;
+  color: var(--text-hi);
+  white-space: nowrap;
+}
+
+.accent-dot {
+  background: var(--accent-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand-mark,
+  .topmain,
+  .nav-inner {
+    animation: none !important;
+    transition: none !important;
+  }
+}
